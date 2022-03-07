@@ -28,6 +28,18 @@ echo -ne "
     fi
     ( arch-chroot /mnt $HOME/ArchTitus/scripts/3-post-setup.sh )|& tee 3-post-setup.log
     cp -v *.log /mnt/home/$USERNAME
+    chown $USERNAME:$USERNAME /mnt/home/$USERNAME*.log
+
+    if [[ $DESKTOP_ENV == "gnome" && $INSTALL_TYPE == "FULL" ]]; then
+      echo -ne "
+      -------------------------------------------------------------------------
+                  Run scripts/4-postboot-setup.sh after rebooting
+      -------------------------------------------------------------------------
+      "
+      cp -f $SCRIPT_DIR/scripts/4-postboot-setup.sh /mnt/home/$USERNAME/4-postboot-setup.sh
+      chown $USERNAME:$USERNAME /mnt/home/$USERNAME/4-postboot-setup.sh
+      chmod +x /mnt/home/$USERNAME/4-postboot-setup.sh
+    fi
 
 echo -ne "
 -------------------------------------------------------------------------

@@ -33,9 +33,9 @@ fi
 # set kernel parameter for adding splash screen
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 
-echo -e "Installing CyberRe Grub theme..."
+echo -e "Installing Arch-Silence Grub theme..."
 THEME_DIR="/boot/grub/themes"
-THEME_NAME=CyberRe
+THEME_NAME=arch-silence
 echo -e "Creating the theme directory..."
 mkdir -p "${THEME_DIR}/${THEME_NAME}"
 echo -e "Copying the theme..."
@@ -46,6 +46,7 @@ cp -an /etc/default/grub /etc/default/grub.bak
 echo -e "Setting the theme as the default..."
 grep "GRUB_THEME=" /etc/default/grub 2>&1 >/dev/null && sed -i '/GRUB_THEME=/d' /etc/default/grub
 echo "GRUB_THEME=\"${THEME_DIR}/${THEME_NAME}/theme.txt\"" >> /etc/default/grub
+
 echo -e "Updating grub..."
 grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "All set!"
@@ -102,22 +103,28 @@ systemctl enable NetworkManager.service
 echo "  NetworkManager enabled"
 systemctl enable bluetooth
 echo "  Bluetooth enabled"
+systemctl enable avahi-daemon.service
+echo "  Avahi enabled"
+systemctl enable fstrim.timer
+echo "  Periodic Trim enabled"
 
 if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
-echo -ne "
--------------------------------------------------------------------------
-                    Creating Snapper Config
--------------------------------------------------------------------------
-"
+  echo -ne "
+  -------------------------------------------------------------------------
+                      Creating Snapper Config
+  -------------------------------------------------------------------------
+  "
 
-SNAPPER_CONF="$HOME/ArchTitus/configs/etc/snapper/configs/root"
-mkdir -p /etc/snapper/configs/
-cp -rfv ${SNAPPER_CONF} /etc/snapper/configs/
+  SNAPPER_CONF="$HOME/ArchTitus/configs/etc/snapper/configs/root"
+  mkdir -p /etc/snapper/configs/
+  cp -rfv ${SNAPPER_CONF} /etc/snapper/configs/
 
-SNAPPER_CONF_D="$HOME/ArchTitus/configs/etc/conf.d/snapper"
-mkdir -p /etc/conf.d/
-cp -rfv ${SNAPPER_CONF_D} /etc/conf.d/
+  SNAPPER_CONF_D="$HOME/ArchTitus/configs/etc/conf.d/snapper"
+  mkdir -p /etc/conf.d/
+  cp -rfv ${SNAPPER_CONF_D} /etc/conf.d/
 
+  systemctl enable snapper-cleanup.timer
+  systemctl enable grub-btrfs.path
 fi
 
 echo -ne "
@@ -130,13 +137,17 @@ PLYMOUTH_THEME="arch-glow" # can grab from config later if we allow selection
 mkdir -p /usr/share/plymouth/themes
 echo 'Installing Plymouth theme...'
 cp -rf ${PLYMOUTH_THEMES_DIR}/${PLYMOUTH_THEME} /usr/share/plymouth/themes
-if  [[ $FS == "luks"]]; then
+if  [[ $FS == "luks" ]]; then
   sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
   sed -i 's/HOOKS=(base udev \(.*block\) /&plymouth-/' /etc/mkinitcpio.conf # create plymouth-encrypt after block hook
 else
   sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
 fi
-plymouth-set-default-theme -R arch-glow # sets the theme and runs mkinitcpio
+if [[ $AUR_HELPER == none ]]; then # sets the theme and runs mkinitcpio
+  plymouth-set-default-theme -R arch-glow
+else
+  plymouth-set-default-theme -R arch-breeze
+fi
 echo 'Plymouth theme installed'
 
 echo -ne "

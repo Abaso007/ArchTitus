@@ -1,0 +1,9 @@
+--END OF MINIMAL INSTALL--
+chrome-gnome-shell
+gdm-tools-git
+flat-remix
+flat-remix-gnome
+flat-remix-gtk
+orchis-theme-git
+tela-circle-icon-theme-git
+numix-circle-icon-theme-git

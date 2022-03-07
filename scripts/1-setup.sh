@@ -49,9 +49,10 @@ echo -ne "
 "
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
 timedatectl --no-ask-password set-timezone ${TIMEZONE}
 timedatectl --no-ask-password set-ntp 1
-localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
 ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 # Set keymaps
 localectl --no-ask-password set-keymap ${KEYMAP}
@@ -119,6 +120,7 @@ elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
 elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
     pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
 fi
+
 #SETUP IS WRONG THIS IS RUN
 if ! source $HOME/ArchTitus/configs/setup.conf; then
 	# Loop through user input until the user gives a valid username
