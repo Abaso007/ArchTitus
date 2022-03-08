@@ -101,6 +101,9 @@ if [[ ! $AUR_HELPER == none ]]; then
     $AUR_HELPER -S --noconfirm --needed ${line}
   done
   sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_blue.png /usr/share/plymouth/themes/arch-breeze/logo.png
+
+  # Add advcpmv alias
+  sed -i -e "s/alias cp=.*/alias cp='advcp -g'/" -e "s/alias mv=.*/alias mv='advmv -g'/" ~/zsh/aliasrc
 fi
 
 export PATH=$PATH:~/.local/bin
