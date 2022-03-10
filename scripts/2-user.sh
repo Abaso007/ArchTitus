@@ -138,6 +138,10 @@ done
 mkdir -p $HOME/.config/easyeffects/output
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/JackHack96/PulseEffects-Presets/master/install.sh)"
 
+# Autostart syncthing
+mkdir -p $HOME/.config/autostart
+cp -f /usr/bin/syncthing $HOME/.config/autostart/syncthing
+
 # Firefox touchscreen scrolling fix
 [ -f /etc/security/pam_env.conf ] && sudo bash -c 'echo "MOZ_USE_XINPUT2 DEFAULT=1" >> /etc/security/pam_env.conf' || sudo bash -c 'echo "MOZ_USE_XINPUT2 DEFAULT=1" >> /usr/share/security/pam_env.conf'
 
