@@ -49,6 +49,7 @@ fuseiso
 gamemode
 gcc
 gimp
+globalprotect-openconnect
 gparted
 gptfdisk
 grub-customizer
