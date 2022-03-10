@@ -12,6 +12,7 @@ net-tools
 gnome-nettool
 gnome-recipes
 gnome-sound-recorder
+gthumb
 polkit-gnome
 arc-gtk-theme
 arc-icon-theme
