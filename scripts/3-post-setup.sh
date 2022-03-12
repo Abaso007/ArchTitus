@@ -107,6 +107,8 @@ systemctl enable avahi-daemon.service
 echo "  Avahi enabled"
 systemctl enable fstrim.timer
 echo "  Periodic Trim enabled"
+systemctl enable systemd-resolved.service
+echo "  Enable resolvconf"
 
 if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
   echo -ne "
