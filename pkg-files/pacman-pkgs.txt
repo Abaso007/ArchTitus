@@ -100,6 +100,7 @@ snapper
 steam
 swtpm
 syncthing
+systemd-resolvconf
 terminus-font
 traceroute
 tree
@@ -117,6 +118,7 @@ which
 wine-gecko
 wine-mono
 winetricks
+wireguard-tools
 wireplumber
 zam-plugins
 zip
