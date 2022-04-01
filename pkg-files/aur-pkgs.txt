@@ -8,5 +8,5 @@ nordic-darker-standard-buttons-theme
 nordic-theme
 plymouth-theme-arch-breeze-git
 pulse-sms
-termius
+termius-app
 ttf-meslo
