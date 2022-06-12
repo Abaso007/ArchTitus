@@ -5,6 +5,7 @@ bitwarden
 discord
 github-desktop
 glances
+google-messages
 lightly-git
 mangohud
 mangohud-common

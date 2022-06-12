@@ -7,6 +7,5 @@ lightlyshaders-git
 nordic-darker-standard-buttons-theme
 nordic-theme
 plymouth-theme-arch-breeze-git
-pulse-sms
 termius-app
 ttf-meslo
