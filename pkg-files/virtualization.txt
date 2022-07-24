@@ -1,0 +1,9 @@
+--END OF MINIMAL INSTALL--
+bridge-utils
+dmidecode
+dtc
+openbsd-netcat
+qemu
+swtpm
+vde2
+virt-manager

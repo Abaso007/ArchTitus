@@ -73,6 +73,8 @@ do
   echo "INSTALLING: ${line}"
   sudo pacman -S --noconfirm --needed ${line}
 done
+# Install glances
+pip install glances
 
 if [[ ! $AUR_HELPER == none ]]; then
   AUR_HELPER_ORIG=$AUR_HELPER
@@ -91,6 +93,10 @@ if [[ ! $AUR_HELPER == none ]]; then
   # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
   # stop the script and move on, not installing any more packages below that line
 
+  if [[ $DESKTOP_ENV == "kde" ]]; then
+    sudo pacman -S --noconfirm --needed lightly-git
+    $AUR_HELPER -S --noconfirm --needed lightlyshaders-git
+  fi
   sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/aur-pkgs.txt | while read line
   do
     if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
@@ -122,6 +128,34 @@ if [[ $INSTALL_TYPE == "FULL" ]]; then
     git clone https://github.com/stojshic/dotfiles-openbox
     ./dotfiles-openbox/install-titus.sh
   fi
+fi
+
+# Install gaming packages if chosen
+if [[ $GAMING == "true" ]]; then
+  if [[ ! $AUR_HELPER == none ]]; then
+    $AUR_HELPER -S --noconfirm --needed dxvk-bin
+  fi
+  sudo pacman -S --noconfirm --needed mangohud mandohud-common
+  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/gaming.txt | while read line; do
+    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
+      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+      continue
+    fi
+    echo "INSTALLING: ${line}"
+    sudo pacman -S --noconfirm --needed ${line}
+  done
+fi
+
+# Install virtualization packages if chosen
+if [[ $VIRT == "true" ]]; then
+  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/virtualization.txt | while read line; do
+    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
+      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+      continue
+    fi
+    echo "INSTALLING: ${line}"
+    sudo pacman -S --noconfirm --needed ${line}
+  done
 fi
 
 [ -z $AUR_HELPER_ORIG ] || { AUR_HELPER=$AUR_HELPER_ORIG; sudo pacman -Rs --noconfirm yay; }

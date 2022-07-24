@@ -1,0 +1,7 @@
+gamemode
+--END OF MINIMAL INSTALL--
+lutris
+steam
+wine-gecko
+wine-mono
+winetricks

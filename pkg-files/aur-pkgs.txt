@@ -1,11 +1,8 @@
 --END OF MINIMAL INSTALL--
 advcpmv
 autojump
-dxvk-bin
+cider-git
 epson-inkjet-printer-201308w
-lightlyshaders-git
-nordic-darker-standard-buttons-theme
-nordic-theme
 plymouth-theme-arch-breeze-git
 termius-app
 ttf-meslo

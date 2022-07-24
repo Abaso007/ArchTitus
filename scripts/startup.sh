@@ -311,6 +311,40 @@ desktopenv () {
   set_option DESKTOP_ENV $desktop_env
 }
 
+gaming () {
+  echo -ne "
+  Install gaming-related packages?
+  "
+
+  options=("Yes" "No")
+  select_option $? 1 "${options[@]}"
+
+  case ${options[$?]} in
+    y|Y|yes|Yes|YES)
+    set_option GAMING true;;
+    n|N|no|NO|No)
+    set_option GAMING false;;
+    *) echo "Wrong option. Try again";gaming;;
+  esac
+}
+
+virt () {
+  echo -ne "
+  Install virtualization-related packages?
+  "
+
+  options=("Yes" "No")
+  select_option $? 1 "${options[@]}"
+
+  case ${options[$?]} in
+    y|Y|yes|Yes|YES)
+    set_option VIRT true;;
+    n|N|no|NO|No)
+    set_option VIRT false;;
+    *) echo "Wrong option. Try again";virt;;
+  esac
+}
+
 installtype () {
   echo -ne "Please select type of installation:\n\n
   Full install: Installs full featured desktop enviroment, with added apps and themes needed for everyday use\n
@@ -342,6 +376,12 @@ if [[ ! $desktop_env == server ]]; then
   logo
   installtype
 fi
+clear
+logo
+gaming
+clear
+logo
+virt
 clear
 logo
 diskpart
