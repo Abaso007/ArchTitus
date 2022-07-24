@@ -160,6 +160,17 @@ fi
 
 [ -z $AUR_HELPER_ORIG ] || { AUR_HELPER=$AUR_HELPER_ORIG; sudo pacman -Rs --noconfirm yay; }
 
+# Install flatpak apps
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/flatpak.txt | while read line; do
+  if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
+    # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+    continue
+  fi
+  echo "INSTALLING: ${line}"
+  flatpak install flathub ${line} -y
+done
+
 # Get rid of all the extra application entries from zam-plugins and mda.lv2
 mkdir -p $HOME/.local/share/applications
 for i in /usr/share/applications/in.lsp_plug* /usr/share/applications/com.zamaudio*; do
