@@ -4,5 +4,5 @@ autojump
 cider-git
 epson-inkjet-printer-201308w
 plymouth-theme-arch-breeze-git
-termius-app
 ttf-meslo
+rustdesk-bin

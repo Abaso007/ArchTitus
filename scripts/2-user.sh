@@ -73,8 +73,6 @@ do
   echo "INSTALLING: ${line}"
   sudo pacman -S --noconfirm --needed ${line}
 done
-# Install glances
-pip install glances
 
 if [[ ! $AUR_HELPER == none ]]; then
   AUR_HELPER_ORIG=$AUR_HELPER
