@@ -41,7 +41,20 @@ fi
 
 echo -ne "
 -------------------------------------------------------------------------
-               Enabling Login Display Manager
+                    Enabling Plymouth Boot Splash
+-------------------------------------------------------------------------
+"
+if  [[ $FS == "luks" ]]; then
+  sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
+  sed -i 's/HOOKS=(base udev \(.*block\) /&plymouth-/' /etc/mkinitcpio.conf # create plymouth-encrypt after block hook
+else
+  sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
+fi
+plymouth-set-default-theme -R bgrt
+
+echo -ne "
+-------------------------------------------------------------------------
+                    Enabling Login Display Manager
 -------------------------------------------------------------------------
 "
 if [[ ${DESKTOP_ENV} == "kde" ]]; then
@@ -82,7 +95,7 @@ echo "  Enable resolvconf"
 if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
   echo -ne "
   -------------------------------------------------------------------------
-                      Creating Snapper Config
+                    Creating Snapper Config
   -------------------------------------------------------------------------
   "
 

@@ -6,6 +6,7 @@ minecraft-launcher
 moonlight-qt
 onlyoffice-bin
 ocs-url
+plymouth
 snapper-gui-git
 termius
 ttf-meslo-nerd-font-powerlevel10k
