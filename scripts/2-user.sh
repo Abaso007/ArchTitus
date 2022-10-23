@@ -91,10 +91,6 @@ if [[ ! $AUR_HELPER == none ]]; then
   # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
   # stop the script and move on, not installing any more packages below that line
 
-  if [[ $DESKTOP_ENV == "kde" ]]; then
-    sudo pacman -S --noconfirm --needed lightly-git
-    $AUR_HELPER -S --noconfirm --needed lightlyshaders-git
-  fi
   sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/aur-pkgs.txt | while read line
   do
     if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
@@ -113,19 +109,12 @@ fi
 export PATH=$PATH:~/.local/bin
 
 # Theming DE if user chose FULL installation
-if [[ $INSTALL_TYPE == "FULL" ]]; then
-  if [[ $DESKTOP_ENV == "kde" ]]; then
-    sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_white.png /usr/share/plymouth/themes/arch-breeze/logo.png
-    cp -r ~/ArchTitus/configs/.config/* ~/.config/
-    pip install konsave
-    konsave -i ~/ArchTitus/configs/kde.knsv
-    sleep 1
-    konsave -a kde
-  elif [[ $DESKTOP_ENV == "openbox" ]]; then
-    cd ~
-    git clone https://github.com/stojshic/dotfiles-openbox
-    ./dotfiles-openbox/install-titus.sh
-  fi
+if [[ $INSTALL_TYPE == "FULL" ]] && [[ $DESKTOP_ENV == "kde" ]]; then
+  sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_white.png /usr/share/plymouth/themes/arch-breeze/logo.png
+  pip install konsave
+  konsave -i ~/ArchTitus/configs/kde.knsv
+  sleep 1
+  konsave -a kde
 fi
 
 # Install gaming packages if chosen

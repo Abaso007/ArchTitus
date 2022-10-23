@@ -305,7 +305,7 @@ aurhelper () {
 desktopenv () {
   # Let the user choose Desktop Enviroment from predefined list
   echo -ne "Please select your desired Desktop Enviroment:\n"
-  options=(gnome kde cinnamon xfce mate budgie lxde deepin openbox server)
+  options=(awesome gnome kde xfce mate server)
   select_option $? 4 "${options[@]}"
   desktop_env=${options[$?]}
   set_option DESKTOP_ENV $desktop_env
@@ -354,9 +354,6 @@ installtype () {
   install_type=${options[$?]}
   set_option INSTALL_TYPE $install_type
 }
-
-# More features in future
-# language (){}
 
 # Starting functions
 clear
