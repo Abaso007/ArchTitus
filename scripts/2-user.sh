@@ -100,7 +100,6 @@ if [[ ! $AUR_HELPER == none ]]; then
     echo "INSTALLING: ${line}"
     $AUR_HELPER -S --noconfirm --needed ${line}
   done
-  sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_blue.png /usr/share/plymouth/themes/arch-breeze/logo.png
 
   # Add advcpmv alias
   sed -i -e "s/alias cp=.*/alias cp='advcp -g'/" -e "s/alias mv=.*/alias mv='advmv -g'/" ~/zsh/aliasrc
@@ -110,7 +109,6 @@ export PATH=$PATH:~/.local/bin
 
 # Theming DE if user chose FULL installation
 if [[ $INSTALL_TYPE == "FULL" ]] && [[ $DESKTOP_ENV == "kde" ]]; then
-  sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_white.png /usr/share/plymouth/themes/arch-breeze/logo.png
   pip install konsave
   konsave -i ~/ArchTitus/configs/kde.knsv
   sleep 1
