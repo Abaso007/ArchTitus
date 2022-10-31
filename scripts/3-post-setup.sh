@@ -29,35 +29,40 @@ editor no
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
-options cryptdevice=UUID=$ENCRYPTED_PARTITION_UUID:ROOT:allow-discards root=/dev/mapper/ROOT rootflags=subvol=@ rd.luks.options=discard rw" > /boot/loader/entries/arch.conf
+options root=$mpartition3 rootflags=subvol=@ rw" > /boot/loader/entries/arch.conf
   # linux-fallback
   echo -ne "
 title Arch Linux (fallback initramfs)
 linux /vmlinuz-linux
 initrd /initramfs-linux-fallback.img
-options cryptdevice=UUID=$ENCRYPTED_PARTITION_UUID:ROOT:allow-discards root=/dev/mapper/ROOT rootflags=subvol=@ rd.luks.options=discard rw" > /boot/loader/entries/arch-fallback.conf
+options root=$mpartition3 rootflags=subvol=@ rw" > /boot/loader/entries/arch-fallback.conf
   # linux-lts
   echo -ne "
 title Arch Linux LTS
 linux /vmlinuz-linux-lts
 initrd /initramfs-linux-lts.img
-options cryptdevice=UUID=$ENCRYPTED_PARTITION_UUID:ROOT:allow-discards root=/dev/mapper/ROOT rootflags=subvol=@ rd.luks.options=discard rw" > /boot/loader/entries/arch-lts.conf
+options root=$mpartition3 rootflags=subvol=@ rw" > /boot/loader/entries/arch-lts.conf
   # linux-lts-fallback
   echo -ne "
 title Arch Linux LTS
 linux /vmlinuz-linux-lts
-initrd /initramfs-linux-lts-fallback..img
-options cryptdevice=UUID=$ENCRYPTED_PARTITION_UUID:ROOT:allow-discards root=/dev/mapper/ROOT rootflags=subvol=@ rd.luks.options=discard rw" > /boot/loader/entries/arch-lts-fallback.conf
+initrd /initramfs-linux-lts-fallback.img
+options root=$mpartition3 rootflags=subvol=@ rw" > /boot/loader/entries/arch-lts-fallback.conf
   for i in /boot/loader/entries/*.conf; do
+    if [[ "${FS}" == "luks" ]]; then
+      sed -i "s|options |options cryptdevice=UUID=$ENCRYPTED_PARTITION_UUID:ROOT:allow-discards rd.luks.options=discard |" $i
+    fi 
     if [[ "$microcode" ]]; then
       sed -i "1i|initramfs-linux|initrd /$microcode.img|" $i
     fi
     if $SWAPFILE; then
       curl -LJO https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c
       gcc -O2 -o btrfs_map_physical btrfs_map_physical.c
-      sed -i "s|rw|rw resume=/dev/mapper/ROOT resume_offset=$(./btrfs_map_physical /mnt/swapfile | head -n2 | tail -n1 | awk '{print $6}') / $(getconf PAGESIZE)|" $i
+      local tmp="$(./btrfs_map_physical /swap/swapfile | head -n2 | tail -n1 | awk '{print $6}')"
+      sed -i "s|rw|rw resume=$mpartition3 resume_offset=$tmp / $(getconf PAGESIZE)|" $i
     fi
   done
+  rm btrfs_map_physical.c btrfs_map_physical
 fi
 
 echo -ne "

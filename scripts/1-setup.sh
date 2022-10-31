@@ -151,8 +151,7 @@ if [[ ${FS} == "luks" ]]; then
 # add encrypt in mkinitcpio.conf before filesystems in hooks
     sed -i 's/filesystems/encrypt filesystems/g' /etc/mkinitcpio.conf
 # making mkinitcpio with linux kernel
-    mkinitcpio -p linux-lts
-    mkinitcpio -p linux
+    mkinitcpio -P
 fi
 echo -ne "
 -------------------------------------------------------------------------

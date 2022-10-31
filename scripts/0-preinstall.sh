@@ -70,19 +70,13 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 createswapfile() {
-    if [[ "${FS}" == "ext4" ]]; then
-        local path=/opt/swap
-        mkdir -p /mnt$path # Put swap into the actual system, not into RAM disk, otherwise there is no point in it, it'll cache RAM into RAM. So, /mnt/ everything.
-    else
-        local path=/swap
-        truncate -s 0 /mnt$path/swapfile
-        chattr +C /mnt$path/swapfile #apply NOCOW, btrfs needs that.
-    fi  
-    dd if=/dev/zero of=/mnt$path/swapfile bs=1M count=4096 status=progress
-    chmod 600 /mnt$path/swapfile # set permissions.
-    chown root /mnt$path/swapfile
-    mkswap /mnt$path/swapfile
-    swapon /mnt$path/swapfile
+    truncate -s 0 /mnt/swap/swapfile
+    chattr +C /mnt/swap/swapfile #apply NOCOW, btrfs needs that.
+    dd if=/dev/zero of=/mnt/swap/swapfile bs=1M count=4096 status=progress
+    chmod 600 /mnt/swap/swapfile # set permissions.
+    chown root /mnt/swap/swapfile
+    mkswap /mnt/swap/swapfile
+    swapon /mnt/swap/swapfile
     echo "vm.swappiness=10" > /mnt/etc/sysctl.conf # Lower swappiness
 }
 
@@ -130,10 +124,6 @@ if [[ "${FS}" == "btrfs" ]]; then
     mkfs.btrfs -L ROOT ${partition3} -f
     mount -t btrfs ${partition3} /mnt
     subvolumesetup
-elif [[ "${FS}" == "ext4" ]]; then
-    mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
-    mkfs.ext4 -L ROOT ${partition3}
-    mount -t ext4 ${partition3} /mnt
 elif [[ "${FS}" == "luks" ]]; then
     mpartition3=/dev/mapper/ROOT
     mkfs.vfat -F32 -n "EFIBOOT" ${partition2}

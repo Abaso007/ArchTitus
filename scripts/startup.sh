@@ -161,17 +161,16 @@ swapfile() {
 }
 filesystem () {
 # This function will handle file systems. At this movement we are handling only
-# btrfs and ext4. Others will be added in future.
+# btrfs. Others may be added in future.
 echo -ne "
 Please Select your file system for both boot and root
 "
-options=("btrfs" "ext4" "luks" "exit")
+options=("btrfs" "luks" "exit")
 select_option $? 1 "${options[@]}"
 
 case $? in
 0) set_option FS btrfs;;
-1) set_option FS ext4;;
-2) 
+1) 
 while true; do
   echo -ne "Please enter your luks password: \n"
   read -s luks_password # read password without echo
