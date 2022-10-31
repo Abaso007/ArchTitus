@@ -161,7 +161,7 @@ swapfile() {
 }
 filesystem () {
 # This function will handle file systems. At this movement we are handling only
-# btrfs. Others may be added in future.
+# btrfs. Others maybe added in future.
 echo -ne "
 Please Select your file system for both boot and root
 "
@@ -187,7 +187,7 @@ while true; do
   fi
 done
 ;;
-3) exit ;;
+2) exit ;;
 *) echo "Wrong option please select again"; filesystem;;
 esac
 }
@@ -290,13 +290,8 @@ set_option NAME_OF_MACHINE $nameofmachine
 aurhelper () {
   # Let the user choose AUR helper from predefined list
   echo -ne "Please enter your desired AUR helper:\n"
-  options=(paru yay picaur aura trizen pacaur pamac none)
+  options=(yay pamac none)
   select_option $? 4 "${options[@]}"
-  if [ "${options[$?]}" == "pamac" ]; then
-    echo -ne "Which Pamac?:\n"
-    options=(pamac-all pamac-nosnap pamac-aur)
-    select_option $? 4 "${options[@]}"
-  fi
   aur_helper=${options[$?]}
   set_option AUR_HELPER $aur_helper
 }
@@ -304,7 +299,7 @@ aurhelper () {
 desktopenv () {
   # Let the user choose Desktop Enviroment from predefined list
   echo -ne "Please select your desired Desktop Enviroment:\n"
-  options=(awesome gnome kde xfce server)
+  options=(gnome kde xfce server)
   select_option $? 4 "${options[@]}"
   desktop_env=${options[$?]}
   set_option DESKTOP_ENV $desktop_env
@@ -344,16 +339,6 @@ virt () {
   esac
 }
 
-installtype () {
-  echo -ne "Please select type of installation:\n\n
-  Full install: Installs full featured desktop enviroment, with added apps and themes needed for everyday use\n
-  Minimal Install: Installs only apps few selected apps to get you started\n"
-  options=(FULL MINIMAL)
-  select_option $? 4 "${options[@]}"
-  install_type=${options[$?]}
-  set_option INSTALL_TYPE $install_type
-}
-
 # Starting functions
 clear
 logo
@@ -361,17 +346,9 @@ userinfo
 clear
 logo
 desktopenv
-# Set fixed options that installation uses if user choses server installation
-set_option INSTALL_TYPE MINIMAL
-set_option AUR_HELPER NONE
-if [[ ! $desktop_env == server ]]; then
-  clear
-  logo
-  aurhelper
-  clear
-  logo
-  installtype
-fi
+clear
+logo
+aurhelper
 clear
 logo
 gaming

@@ -1,20 +1,15 @@
-plasma-desktop
-sddm
-dolphin
---END OF MINIMAL INSTALL--
 ark
 audiocd-kio
+dolphin
 dolphin-plugins
 filelight
 gwenview
 kate
 kcalc
 kcodecs
-kcoreaddons
 kcron
 kdeconnect
 kgpg
-kipi-plugins
 knotes
 kompare
 konsole
@@ -26,11 +21,12 @@ kwalletmanager
 maliit-keyboard
 okular
 packagekit-qt5
+plasma
 plasma-wayland-session
 print-manager
 qt5-virtualkeyboard
+sddm
 skanlite
 spectacle
 sshfs
 yakuake
-zeroconf-ioslave

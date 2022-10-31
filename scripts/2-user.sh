@@ -29,19 +29,11 @@ sudo chsh -s $(which zsh) $(whoami)
 sed -i "s/EDITOR=.*/EDITOR=nano/" zsh/.zshrc
 sed -i "s/EDITOR=.*/EDITOR=nano/" zsh/aliasrc
 
-if [[ $DESKTOP_ENV == "kde" && $INSTALL_TYPE == "FULL" ]]; then
-  sed -i "s/plasma-desktop/plasma/" ~/ArchTitus/pkg-files/${DESKTOP_ENV}.txt
+# Install DE
+sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/${DESKTOP_ENV}.txt
+if [[ $DESKTOP_ENV == "gnome" ]] && [[ ${AUR_HELPER} == "pamac" ]]; then
+  sudo pacman -Rdd --noconfirm gnome-software
 fi
-sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/${DESKTOP_ENV}.txt | while read line
-do
-  if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]
-  then
-    # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-    continue
-  fi
-  echo "INSTALLING: ${line}"
-  sudo pacman -S --noconfirm --needed ${line}
-done
 
 # Add Chaotic AUR
 echo "Adding Chaotic AUR"
@@ -50,56 +42,19 @@ sudo pacman-key --lsign-key FBA220DFC880C036
 sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 sudo bash -c "echo -e \"[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\" >> /etc/pacman.conf"
 sudo pacman -Sy
+sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/chaoticaur-pkgs.txt
 
-if [[ -f ~/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt ]]; then
-  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt | while read line
-  do
-    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]
-    then
-      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-      continue
-    fi
-    echo "INSTALLING: ${line}"
-    sudo pacman -S --noconfirm --needed ${line}
-  done
+if [[ -f "$HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt" ]]; then
+  sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt
 fi
 
-sed -n '/'$INSTALL_TYPE'/q;p' $HOME/ArchTitus/pkg-files/chaoticaur-pkgs.txt | while read line
-do
-  if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-    # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-    continue
-  fi
-  echo "INSTALLING: ${line}"
-  sudo pacman -S --noconfirm --needed ${line}
-done
-
-if [[ ! $AUR_HELPER == none ]]; then
-  AUR_HELPER_ORIG=$AUR_HELPER
-  if [[ $AUR_HELPER == "pamac-"* ]]; then
+if [[ ${AUR_HELPER} != "none" ]]; then
+  sudo pacman -S yay --noconfirm --needed # Use yay temporarily - pamac doesn't work right during install
+  if [[ ${AUR_HELPER} == "pamac" ]]; then
     sudo pacman -Rdd --noconfirm archlinux-appstream-data
-    sudo pacman -S --noconfirm archlinux-appstream-data-pamac # Replace default with pamac
-    sudo pacman -S yay --noconfirm --needed # Use yay temporarily - pamac doesn't work right during install
-    AUR_HELPER=yay
+    sudo pacman -S --noconfirm archlinux-appstream-data-pamac pamac-nosnap # Replace default with pamac
   fi
-  cd ~
-  git clone "https://aur.archlinux.org/$AUR_HELPER_ORIG.git"
-  cd ~/$AUR_HELPER_ORIG
-  makepkg -si --noconfirm
-  cd ~
-  rm -rf ~/$AUR_HELPER_ORIG
-  # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-  # stop the script and move on, not installing any more packages below that line
-
-  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/aur-pkgs.txt | while read line
-  do
-    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-      continue
-    fi
-    echo "INSTALLING: ${line}"
-    $AUR_HELPER -S --noconfirm --needed ${line}
-  done
+  yay -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/aur-pkgs.txt
 
   # Add advcpmv alias
   sed -i -e "s/alias cp=.*/alias cp='advcp -g'/" -e "s/alias mv=.*/alias mv='advmv -g'/" ~/zsh/aliasrc
@@ -108,7 +63,7 @@ fi
 export PATH=$PATH:~/.local/bin
 
 # Theming DE if user chose FULL installation
-if [[ $INSTALL_TYPE == "FULL" ]] && [[ $DESKTOP_ENV == "kde" ]]; then
+if [[ ${DESKTOP_ENV} == "kde" ]]; then
   pip install konsave
   konsave -i ~/ArchTitus/configs/kde.knsv
   sleep 1
@@ -116,45 +71,21 @@ if [[ $INSTALL_TYPE == "FULL" ]] && [[ $DESKTOP_ENV == "kde" ]]; then
 fi
 
 # Install gaming packages if chosen
-if [[ $GAMING == "true" ]]; then
-  if [[ ! $AUR_HELPER == none ]]; then
-    $AUR_HELPER -S --noconfirm --needed dxvk-bin
+if [[ ${GAMING} == "true" ]]; then
+  if [[ $AUR_HELPER != "none" ]]; then
+    yay -S --noconfirm --needed dxvk-bin
   fi
-  sudo pacman -S --noconfirm --needed mangohud mandohud-common
-  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/gaming.txt | while read line; do
-    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-      continue
-    fi
-    echo "INSTALLING: ${line}"
-    sudo pacman -S --noconfirm --needed ${line}
-  done
+  sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/gaming.txt
 fi
 
 # Install virtualization packages if chosen
 if [[ $VIRT == "true" ]]; then
-  sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/virtualization.txt | while read line; do
-    if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-      # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-      continue
-    fi
-    echo "INSTALLING: ${line}"
-    sudo pacman -S --noconfirm --needed ${line}
-  done
+  sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/virtualization.txt
 fi
 
-[ -z $AUR_HELPER_ORIG ] || { AUR_HELPER=$AUR_HELPER_ORIG; sudo pacman -Rs --noconfirm yay; }
-
-# Install flatpak apps
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchTitus/pkg-files/flatpak.txt | while read line; do
-  if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-    # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-    continue
-  fi
-  echo "INSTALLING: ${line}"
-  flatpak install flathub ${line} -y
-done
+if [[ ${AUR_HELPER} == "pamac" ]]; then
+  sudo pacman -Rs --noconfirm yay
+fi
 
 # Get rid of all the extra application entries from zam-plugins and mda.lv2
 mkdir -p $HOME/.local/share/applications
@@ -166,7 +97,7 @@ done
 
 # Easyeffects Profiles
 mkdir -p $HOME/.config/easyeffects/output
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/JackHack96/PulseEffects-Presets/master/install.sh)"
+echo 1 | bash -c "$(curl -fsSL https://raw.githubusercontent.com/JackHack96/PulseEffects-Presets/master/install.sh)"
 
 # Autostart syncthing
 mkdir -p $HOME/.config/autostart

@@ -1,3 +1,0 @@
---END OF MINIMAL INSTALL--
-com.slack.Slack
-net.cozic.joplin_desktop
