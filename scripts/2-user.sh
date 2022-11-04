@@ -60,16 +60,6 @@ if [[ ${AUR_HELPER} != "none" ]]; then
   sed -i -e "s/alias cp=.*/alias cp='advcp -g'/" -e "s/alias mv=.*/alias mv='advmv -g'/" ~/zsh/aliasrc
 fi
 
-export PATH=$PATH:~/.local/bin
-
-# Theming DE if user chose FULL installation
-if [[ ${DESKTOP_ENV} == "kde" ]]; then
-  pip install konsave
-  konsave -i ~/ArchTitus/configs/kde.knsv
-  sleep 1
-  konsave -a kde
-fi
-
 # Install gaming packages if chosen
 if [[ ${GAMING} == "true" ]]; then
   if [[ $AUR_HELPER != "none" ]]; then
@@ -85,6 +75,15 @@ fi
 
 if [[ ${AUR_HELPER} == "pamac" ]]; then
   sudo pacman -Rs --noconfirm yay
+fi
+
+# Theming DE if user chose FULL installation
+export PATH=$PATH:~/.local/bin
+if [[ ${DESKTOP_ENV} == "kde" ]]; then
+  pip install konsave
+  konsave -i ~/ArchTitus/configs/kde.knsv
+  sleep 1
+  konsave -a kde
 fi
 
 # Get rid of all the extra application entries from zam-plugins and mda.lv2
