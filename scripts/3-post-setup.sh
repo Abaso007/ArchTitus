@@ -89,7 +89,8 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 if [[ ${DESKTOP_ENV} == "kde" ]]; then
-  systemctl enable sddm.service
+  systemctl disable sddm.service
+  systemctl enable sddm-plymouth.service
 elif [[ "${DESKTOP_ENV}" == "gnome" ]]; then
   systemctl enable gdm.service
 elif [[ ! "${DESKTOP_ENV}" == "server"  ]]; then
