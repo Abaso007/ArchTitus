@@ -1,4 +1,3 @@
---END OF MINIMAL INSTALL--
 bridge-utils
 dmidecode
 dtc

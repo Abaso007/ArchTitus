@@ -1,4 +1,3 @@
---END OF MINIMAL INSTALL--
 appimagelauncher
 authy
 github-desktop
@@ -8,7 +7,6 @@ onlyoffice-bin
 ocs-url
 plymouth
 snapper-gui-git
-snap-pac-grub
 termius
 ttf-meslo-nerd-font-powerlevel10k
 ttf-ms-fonts

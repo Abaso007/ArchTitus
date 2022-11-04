@@ -1,16 +1,14 @@
+dconf-editor
 gnome
 gnome-bluetooth
-xdg-desktop-portal-gnome
-xdg-utils
---END OF MINIMAL INSTALL--
-arc-gtk-theme
-arc-icon-theme
-dconf-editor
 gnome-multi-writer
-gnome-tweaks
-nmap
-net-tools
 gnome-nettool
 gnome-sound-recorder
+gnome-terminal
+gnome-tweaks
 gthumb
+net-tools
+nmap
 polkit-gnome
+xdg-desktop-portal-gnome
+xdg-utils

@@ -1,6 +1,7 @@
 gamemode
---END OF MINIMAL INSTALL--
 lutris
+mangohud
+mangohud-common
 steam
 wine-gecko
 wine-mono

@@ -29,7 +29,7 @@ pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent pa
 pacman -S --noconfirm --needed pacman-contrib terminus-font
 setfont ter-v22b
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-pacman -S --noconfirm --needed reflector rsync grub
+pacman -S --noconfirm --needed reflector rsync
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 echo -ne "
 -------------------------------------------------------------------------
@@ -70,25 +70,14 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 createswapfile() {
-    $SWAPFILE || return 0
-    if [[ "${FS}" == "ext4" ]]; then
-        local path=/opt/swap
-        mkdir -p /mnt$path # Put swap into the actual system, not into RAM disk, otherwise there is no point in it, it'll cache RAM into RAM. So, /mnt/ everything.
-        chattr +C /mnt$path #apply NOCOW, btrfs needs that.
-    else
-        local path=/swap
-        truncate -s 0 /mnt$path/swapfile
-        chattr +C /mnt$path/swapfile #apply NOCOW, btrfs needs that.
-        btrfs property set /mnt$path/swapfile compression none
-    fi  
-    dd if=/dev/zero of=/mnt$path/swapfile bs=1M count=4096 status=progress
-    chmod 600 /mnt$path/swapfile # set permissions.
-    chown root /mnt$path/swapfile
-    mkswap /mnt$path/swapfile
-    swapon /mnt$path/swapfile
-    # The line below is written to /mnt/ but doesn't contain /mnt/, since it's just / for the system itself.
-    echo "$path/swapfile	none	swap	sw	0	0" >> /mnt/etc/fstab # Add swap to fstab, so it KEEPS working after installation.
-    echo "vm.swappiness=10" >> /mnt/etc/sysctl.conf # Lower swappiness
+    truncate -s 0 /mnt/swap/swapfile
+    chattr +C /mnt/swap/swapfile #apply NOCOW, btrfs needs that.
+    dd if=/dev/zero of=/mnt/swap/swapfile bs=1M count=4096 status=progress
+    chmod 600 /mnt/swap/swapfile # set permissions.
+    chown root /mnt/swap/swapfile
+    mkswap /mnt/swap/swapfile
+    swapon /mnt/swap/swapfile
+    echo "vm.swappiness=10" > /mnt/etc/sysctl.conf # Lower swappiness
 }
 
 createsubvolumes () {
@@ -101,11 +90,11 @@ createsubvolumes () {
 }
 
 mountallsubvol () {
-    mount -o ${MOUNT_OPTIONS},subvol=@home ${partition3} /mnt/home
-    mount -o ${MOUNT_OPTIONS},subvol=@tmp ${partition3} /mnt/tmp
-    mount -o ${MOUNT_OPTIONS},subvol=@var ${partition3} /mnt/var
-    mount -o ${MOUNT_OPTIONS},subvol=@.snapshots ${partition3} /mnt/.snapshots
-    $SWAPFILE && mount -o ${MOUNT_OPTIONS},subvol=@swap,x-mount.mkdir ${partition3} /mnt/swap
+    mount -o ${MOUNT_OPTIONS},subvol=@home ${mpartition3} /mnt/home
+    mount -o ${MOUNT_OPTIONS},subvol=@tmp ${mpartition3} /mnt/tmp
+    mount -o ${MOUNT_OPTIONS},subvol=@var ${mpartition3} /mnt/var
+    mount -o ${MOUNT_OPTIONS},subvol=@.snapshots ${mpartition3} /mnt/.snapshots
+    $SWAPFILE && mount -o ${MOUNT_OPTIONS},subvol=@swap,x-mount.mkdir ${mpartition3} /mnt/swap
 }
 
 subvolumesetup () {
@@ -114,7 +103,7 @@ subvolumesetup () {
 # unmount root to remount with subvolume 
     umount /mnt
 # mount @ subvolume
-    mount -o ${MOUNT_OPTIONS},subvol=@ ${partition3} /mnt
+    mount -o ${MOUNT_OPTIONS},subvol=@ ${mpartition3} /mnt
 # make directories home, .snapshots, var, tmp
     mkdir -p /mnt/{home,var,tmp,.snapshots}
 # mount subvolumes
@@ -129,50 +118,43 @@ else
     partition3=${DISK}3
 fi
 
+mpartition3=${partition3}
 if [[ "${FS}" == "btrfs" ]]; then
     mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
     mkfs.btrfs -L ROOT ${partition3} -f
     mount -t btrfs ${partition3} /mnt
     subvolumesetup
-    createswapfile
-elif [[ "${FS}" == "ext4" ]]; then
-    mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
-    mkfs.ext4 -L ROOT ${partition3}
-    mount -t ext4 ${partition3} /mnt
-    createswapfile
 elif [[ "${FS}" == "luks" ]]; then
+    mpartition3=/dev/mapper/ROOT
     mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
 # enter luks password to cryptsetup and format root partition
-    echo -n "${LUKS_PASSWORD}" | cryptsetup -y -v luksFormat ${partition3} -
+    echo -n "${LUKS_PASSWORD}" | cryptsetup -v luksFormat ${partition3} -
 # open luks container and ROOT will be place holder 
     echo -n "${LUKS_PASSWORD}" | cryptsetup open ${partition3} ROOT -
 # now format that container
-    mkfs.btrfs -L ROOT ${partition3}
+    mkfs.btrfs -L ROOT $mpartition3
 # create subvolumes for btrfs
-    mount -t btrfs ${partition3} /mnt
+    mount -t btrfs $mpartition3 /mnt
     subvolumesetup
-    createswapfile
-# store uuid of encrypted partition for grub
+# store uuid of encrypted partition for bootloader
     echo ENCRYPTED_PARTITION_UUID=$(blkid -s UUID -o value ${partition3}) >> $CONFIGS_DIR/setup.conf
 fi
+$SWAPFILE && createswapfile
 
 # mount target
-mkdir -p /mnt/boot/efi
-mount -t vfat -L EFIBOOT /mnt/boot/
+mkdir -p /mnt/boot
+mount -t vfat -L EFIBOOT /mnt/boot
 
 if ! grep -qs '/mnt' /proc/mounts; then
     echo "Drive is not mounted can not continue"
-    echo "Rebooting in 3 Seconds ..." && sleep 1
-    echo "Rebooting in 2 Seconds ..." && sleep 1
-    echo "Rebooting in 1 Second ..." && sleep 1
-    reboot now
+    exit 1
 fi
 echo -ne "
 -------------------------------------------------------------------------
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed
+pacstrap /mnt base base-devel linux linux-firmware linux-lts vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp -R ${SCRIPT_DIR} /mnt/root/ArchTitus
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -184,11 +166,11 @@ echo "
 cat /mnt/etc/fstab
 echo -ne "
 -------------------------------------------------------------------------
-                    GRUB BIOS Bootloader Install & Check
+                     Bootloader Install & Check
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    grub-install --boot-directory=/mnt/boot ${DISK}
+    bootctl install --EFIBOOT-path=/mnt/boot
 else
     pacstrap /mnt efibootmgr --noconfirm --needed
 fi
