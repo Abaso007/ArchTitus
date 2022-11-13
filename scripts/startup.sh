@@ -140,6 +140,23 @@ echo -ne "
 ------------------------------------------------------------------------
 "
 }
+bootmanager() {
+  # Check if UEFI boot supported, use grub if not (bios boot)
+  if [[ ! -d "/sys/firmware/efi" ]]; then
+    set_option BOOTMGR grub
+  else
+    echo -ne "
+    Please Select your boot manager
+    "
+    options=("grub" "systemd-boot" "exit")
+    select_option $? 1 "${options[@]}"
+
+    case $? in
+    0) set_option BOOTMGR grub;;
+    1) set_option BOOTMGR sd;;
+    esac
+  fi
+}
 swapfile() {
   local TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
   if [[ $TOTAL_MEM -lt 8000000 ]]; then
@@ -299,7 +316,7 @@ aurhelper () {
 desktopenv () {
   # Let the user choose Desktop Enviroment from predefined list
   echo -ne "Please select your desired Desktop Enviroment:\n"
-  options=(gnome kde xfce server)
+  options=(gnome kde server)
   select_option $? 4 "${options[@]}"
   desktop_env=${options[$?]}
   set_option DESKTOP_ENV $desktop_env
@@ -343,6 +360,9 @@ virt () {
 clear
 logo
 userinfo
+clear
+logo
+bootmanager
 clear
 logo
 desktopenv

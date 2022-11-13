@@ -43,6 +43,9 @@ sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-ke
 sudo bash -c "echo -e \"[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\" >> /etc/pacman.conf"
 sudo pacman -Sy
 sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/chaoticaur-pkgs.txt
+if [[ $BOOTMGR == grub ]]; then
+  sudo pacman -S --noconfirm --needed snap-pac-grub
+fi
 
 if [[ -f "$HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt" ]]; then
   sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt
@@ -58,6 +61,8 @@ if [[ ${AUR_HELPER} != "none" ]]; then
 
   # Add advcpmv alias
   sed -i -e "s/alias cp=.*/alias cp='advcp -g'/" -e "s/alias mv=.*/alias mv='advmv -g'/" ~/zsh/aliasrc
+
+  sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_blue.png /usr/share/plymouth/themes/arch-breeze/logo.png
 fi
 
 # Install gaming packages if chosen
@@ -77,9 +82,10 @@ if [[ ${AUR_HELPER} == "pamac" ]]; then
   sudo pacman -Rs --noconfirm yay
 fi
 
-# Theming DE if user chose FULL installation
+# Theming DE
 export PATH=$PATH:~/.local/bin
 if [[ ${DESKTOP_ENV} == "kde" ]]; then
+  sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_white.png /usr/share/plymouth/themes/arch-breeze/logo.png
   pip install konsave
   konsave -i ~/ArchTitus/configs/kde.knsv
   sleep 1

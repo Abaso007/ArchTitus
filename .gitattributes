@@ -1,3 +1,9 @@
 # Declare files that will always have LF line endings on checkout.
 *.knsv binary
-* text eol=lf
+*.png binary
+*.pf2 binary
+configs/etc/** eol=lf
+configs/.bashrc eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.md text eol=lf

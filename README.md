@@ -9,8 +9,6 @@ This README contains the steps I do to install and configure a fully-functional 
 
 Download ArchISO from <https://archlinux.org/download/> and put on a USB drive with [Etcher](https://www.balena.io/etcher/), [Ventoy](https://www.ventoy.net/en/index.html), or [Rufus](https://rufus.ie/en/)
 
-If you don't want to build using this script I did create an image @ <https://www.christitus.com/arch-titus>
-
 ## Boot Arch ISO
 
 From initial Prompt type the following commands:
@@ -24,7 +22,7 @@ cd ArchTitus
 ```
 
 ### System Description
-This is completely automated arch install of the KDE desktop environment on arch using all the packages I use on a daily basis. 
+This is completely automated arch install of the Gnome desktop environment on arch using all the packages I use on a daily basis. Also includes KDE setup
 
 ## Troubleshooting
 
