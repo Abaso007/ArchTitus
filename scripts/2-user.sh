@@ -43,9 +43,6 @@ sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-ke
 sudo bash -c "echo -e \"[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\" >> /etc/pacman.conf"
 sudo pacman -Sy
 sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/chaoticaur-pkgs.txt
-if [[ $BOOTMGR == grub ]]; then
-  sudo pacman -S --noconfirm --needed snap-pac-grub
-fi
 
 if [[ -f "$HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt" ]]; then
   sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/${DESKTOP_ENV}-chaoticaur.txt

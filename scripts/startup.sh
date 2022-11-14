@@ -140,22 +140,20 @@ echo -ne "
 ------------------------------------------------------------------------
 "
 }
-bootmanager() {
-  # Check if UEFI boot supported, use grub if not (bios boot)
-  if [[ ! -d "/sys/firmware/efi" ]]; then
-    set_option BOOTMGR grub
-  else
-    echo -ne "
-    Please Select your boot manager
-    "
-    options=("grub" "systemd-boot" "exit")
-    select_option $? 1 "${options[@]}"
+multiboot() {
+  echo -ne "
+  Will you be multibooting?
+  "
+  options=("Yes" "No")
+  select_option $? 1 "${options[@]}"
 
-    case $? in
-    0) set_option BOOTMGR grub;;
-    1) set_option BOOTMGR sd;;
+    case ${options[$?]} in
+        y|Y|yes|Yes|YES)
+        set_option MULTIBOOT true;;
+        n|N|no|NO|No)
+        set_option MULTIBOOT false;;
+        *) echo "Wrong option. Try again"; multiboot;;
     esac
-  fi
 }
 swapfile() {
   local TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
@@ -362,7 +360,7 @@ logo
 userinfo
 clear
 logo
-bootmanager
+multiboot
 clear
 logo
 desktopenv

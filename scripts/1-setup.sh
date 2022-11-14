@@ -26,10 +26,7 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 pacman -S --noconfirm --needed pacman-contrib curl
-pacman -S --noconfirm --needed reflector rsync arch-install-scripts git
-if [[ $BOOTMGR == grub ]]; then
-    pacman -S --noconfirm --needed grub
-fi
+pacman -S --noconfirm --needed reflector rsync arch-install-scripts git grub
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 
 nc=$(grep -c ^processor /proc/cpuinfo)
