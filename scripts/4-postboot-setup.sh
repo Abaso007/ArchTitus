@@ -2,7 +2,7 @@
 echo "Installing flatpak packages"
 sudo pacman -S --noconfirm --needed flatpak
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-for i in "com.slack.Slack-Slack" "net.cozic.joplin_desktop-Joplin"; do
+for i in "com.slack.Slack" "com.bitwarden.desktop" "com.github.iwalton3.jellyfin-media-player" "com.github.tchx84.Flatseal" "io.github.JaGoLi.ytdl_gui" "io.github.shiftey.Desktop" "md.obsidian.Obsidian" "org.zotero.Zotero"; do
   pkg="$(echo $i | awk -F- '{print $1}')"
   name="$(echo $i | awk -F- '{print $2}')"
   echo "INSTALLING: $name"

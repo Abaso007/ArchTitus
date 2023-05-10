@@ -10,7 +10,6 @@ awesome-terminal-fonts
 bash-completion
 bind
 bison
-bitwarden
 bluez
 bluez-libs
 bluez-utils
@@ -97,6 +96,8 @@ unrar
 unzip
 usbutils
 virt-viewer
+vivaldi
+vivaldi-ffmpeg-codecs
 vlc
 which
 wireguard-tools
@@ -109,7 +110,6 @@ xorg-drivers
 xorg-xwayland
 xorg-xkill
 xorg-xinit
-youtube-dl
 zam-plugins
 zip
 zsh
