@@ -1,0 +1,8 @@
+com.slack.Slack Slack
+com.bitwarden.desktop Bitwarden
+com.github.iwalton3.jellyfin-media-player Jellyfin
+com.github.tchx84.Flatseal Flatseal
+io.github.JaGoLi.ytdl_gui Youtube_Gui
+io.github.shiftey.Desktop Github_Desktop
+md.obsidian.Obsidian Obsidian
+org.zotero.Zotero Zotero

@@ -1,7 +1,6 @@
 appimagelauncher
 authy
 minecraft-launcher
-moonlight-qt
 onlyoffice-bin
 ocs-url
 plymouth
