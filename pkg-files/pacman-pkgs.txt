@@ -19,20 +19,16 @@ cronie
 cups
 cups-pdf
 dialog
-discord
 dnsmasq
 dosfstools
-easyeffects
 efibootmgr
 egl-wayland
 exfatprogs
-firefox
 flex
 fuse2
 fuse3
 fuseiso
 gcc
-gimp
 globalprotect-openconnect
 gparted
 gptfdisk
@@ -47,7 +43,7 @@ hwinfo
 iio-sensor-proxy
 jdk-openjdk
 libdvdcss
-libreoffice
+libreoffice-fresh
 libtool
 linux-headers
 linux-lts-headers
@@ -55,7 +51,6 @@ lsof
 lzop
 m4
 make
-mda.lv2
 mesa
 neofetch
 noto-fonts-emoji
@@ -84,7 +79,6 @@ snap-pac
 snapper
 syncthing
 systemd-resolvconf
-telegram-desktop
 terminus-font
 traceroute
 tree
@@ -95,7 +89,6 @@ ufw
 unrar
 unzip
 usbutils
-virt-viewer
 vivaldi
 vivaldi-ffmpeg-codecs
 vlc
@@ -110,7 +103,6 @@ xorg-drivers
 xorg-xwayland
 xorg-xkill
 xorg-xinit
-zam-plugins
 zip
 zsh
 zsh-syntax-highlighting

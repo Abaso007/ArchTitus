@@ -1,6 +1,5 @@
 advcpmv
 autojump
-cider-git
 epson-inkjet-printer-201308w
 plymouth-theme-arch-breeze-git
 ttf-meslo
