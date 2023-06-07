@@ -19,7 +19,6 @@ cronie
 cups
 cups-pdf
 dialog
-discord
 dnsmasq
 dosfstools
 easyeffects
