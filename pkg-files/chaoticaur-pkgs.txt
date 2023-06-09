@@ -1,12 +1,6 @@
 appimagelauncher
-authy
-minecraft-launcher
-onlyoffice-bin
-ocs-url
 plymouth
 snapper-gui-git
 snap-pac-grub
 ttf-meslo-nerd-font-powerlevel10k
 ttf-ms-fonts
-vscodium
-zoom
