@@ -42,6 +42,7 @@ hwinfo
 iio-sensor-proxy
 jdk-openjdk
 libdvdcss
+libreoffice-fresh
 libtool
 linux-headers
 linux-lts-headers

@@ -13,7 +13,6 @@ com.vscodium.codium VSCodium
 md.obsidian.Obsidian Obsidian
 org.chromium.Chromium Chromium
 org.gimp.GIMP Gimp
-org.libreoffice.LibreOffice LibreOffice
 org.mozilla.firefox Firefox
 org.onlyoffice.desktopeditors Onlyoffice
 org.telegram.desktop Telegram
