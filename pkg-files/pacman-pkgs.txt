@@ -103,6 +103,7 @@ xorg-drivers
 xorg-xwayland
 xorg-xkill
 xorg-xinit
+yt-dlp
 zip
 zsh
 zsh-syntax-highlighting
