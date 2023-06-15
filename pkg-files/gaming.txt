@@ -1,8 +1,0 @@
-gamemode
-lutris
-mangohud
-mangohud-common
-steam
-wine-gecko
-wine-mono
-winetricks

@@ -320,23 +320,6 @@ desktopenv () {
   set_option DESKTOP_ENV $desktop_env
 }
 
-gaming () {
-  echo -ne "
-  Install gaming-related packages?
-  "
-
-  options=("Yes" "No")
-  select_option $? 1 "${options[@]}"
-
-  case ${options[$?]} in
-    y|Y|yes|Yes|YES)
-    set_option GAMING true;;
-    n|N|no|NO|No)
-    set_option GAMING false;;
-    *) echo "Wrong option. Try again";gaming;;
-  esac
-}
-
 virt () {
   echo -ne "
   Install virtualization-related packages?
@@ -367,9 +350,6 @@ desktopenv
 clear
 logo
 aurhelper
-clear
-logo
-gaming
 clear
 logo
 virt

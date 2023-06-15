@@ -39,9 +39,12 @@ chmod +x gnome-dash-fix/interactive.py
 echo "Set font to 'MesloLGNS NF Regular' in Gnome Terminal before first launching it!"
 echo -e "Here's 3rd party extensions I use (grab them from extensions.gnome.org):
 AppIndicator
+Bluetooth Quick Connect
 Caffeine
+Clipboard Indicator
 Dash to Dock
 GSConnect
 Improved OSK - only needed if you have a touchscreen
+Quick Setting Tweaker
 "
 echo "You can also modify lockscreen settings with Login Manager Settings App"

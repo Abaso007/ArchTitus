@@ -5,7 +5,6 @@ com.bitwarden.desktop Bitwarden
 com.github.iwalton3.jellyfin-media-player Jellyfin
 com.github.tchx84.Flatseal Flatseal
 com.parsecgaming.parsec Parsec
-io.github.JaGoLi.ytdl_gui Youtube_Gui
 io.github.shiftey.Desktop Github_Desktop
 com.github.wwmm.easyeffects EasyEffects
 com.mojang.Minecraft Minecraft
@@ -14,7 +13,6 @@ org.bleachbit.BleachBit BleachBit
 org.chromium.Chromium Chromium
 org.gimp.GIMP Gimp
 org.gnome.meld Meld
-org.mozilla.firefox Firefox
 org.onlyoffice.desktopeditors Onlyoffice
 org.telegram.desktop Telegram
 org.virt_manager.virt-viewer VirtViewer

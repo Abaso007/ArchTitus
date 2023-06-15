@@ -62,14 +62,6 @@ if [[ ${AUR_HELPER} != "none" ]]; then
   sudo ln -sf /usr/share/plymouth/themes/arch-breeze/logo_symb_blue.png /usr/share/plymouth/themes/arch-breeze/logo.png
 fi
 
-# Install gaming packages if chosen
-if [[ ${GAMING} == "true" ]]; then
-  if [[ $AUR_HELPER != "none" ]]; then
-    yay -S --noconfirm --needed dxvk-bin
-  fi
-  sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/gaming.txt
-fi
-
 # Install virtualization packages if chosen
 if [[ $VIRT == "true" ]]; then
   sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/virtualization.txt
@@ -88,14 +80,6 @@ if [[ ${DESKTOP_ENV} == "kde" ]]; then
   sleep 1
   konsave -a kde
 fi
-
-# Get rid of all the extra application entries from zam-plugins and mda.lv2
-mkdir -p $HOME/.local/share/applications
-for i in /usr/share/applications/in.lsp_plug* /usr/share/applications/com.zamaudio*; do
-  sudo bash -c "echo 'NoDisplay=true' >> $i"
-  sudo bash -c "mv -f $i $HOME/.local/share/applications/"
-  sudo chown -R $USER:$USER $HOME/.local/share/applications/
-done
 
 # Easyeffects Profiles
 mkdir -p $HOME/.config/easyeffects/output
