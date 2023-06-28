@@ -75,6 +75,7 @@ vivaldi-ffmpeg-codecs
 vlc
 which
 wireguard-tools
+wireless_tools
 wireplumber
 xdg-user-dirs
 xorg
