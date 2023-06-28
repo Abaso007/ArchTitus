@@ -1,4 +1,3 @@
 snapper-gui-git
-snap-pac-grub
 ttf-ms-fonts
 vscodium

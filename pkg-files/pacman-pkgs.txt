@@ -34,6 +34,7 @@ gst-plugins-ugly
 handbrake
 htop
 iio-sensor-proxy
+inotify-tools
 jdk-openjdk
 libdvdcss
 libreoffice-fresh

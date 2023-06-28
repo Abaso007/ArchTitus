@@ -98,7 +98,9 @@ echo "  Avahi enabled"
 systemctl enable fstrim.timer
 echo "  Periodic Trim enabled"
 systemctl enable systemd-resolved.service
-echo "  Enable resolvconf"
+echo "  Resolvconf enabled"
+systemctl enable grub-btrfsd.service
+echo "  Grub-btrfs snapshots enabled"
 
 echo -ne "
 -------------------------------------------------------------------------
