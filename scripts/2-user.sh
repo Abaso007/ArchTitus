@@ -82,7 +82,7 @@ if [[ ${DESKTOP_ENV} == "kde" ]]; then
 fi
 
 # Easyeffects Profiles
-mkdir -p $HOME/.config/easyeffects/output
+mkdir -p $HOME/.var/app/com.github.wwmm.pulseeffects/easyeffects/output
 echo 1 | bash -c "$(curl -fsSL https://raw.githubusercontent.com/JackHack96/PulseEffects-Presets/master/install.sh)"
 
 # Autostart syncthing
