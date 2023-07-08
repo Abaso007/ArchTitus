@@ -5,9 +5,10 @@ com.bitwarden.desktop Bitwarden
 com.github.iwalton3.jellyfin-media-player Jellyfin
 com.github.tchx84.Flatseal Flatseal
 com.parsecgaming.parsec Parsec
-io.github.shiftey.Desktop Github_Desktop
 com.github.wwmm.easyeffects EasyEffects
 com.mojang.Minecraft Minecraft
+io.github.shiftey.Desktop Github_Desktop
+de.haeckerfelix.Fragments Fragments
 md.obsidian.Obsidian Obsidian
 org.bleachbit.BleachBit BleachBit
 org.chromium.Chromium Chromium
