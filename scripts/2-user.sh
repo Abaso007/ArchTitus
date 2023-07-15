@@ -67,10 +67,6 @@ if [[ $VIRT == "true" ]]; then
   sudo pacman -S --noconfirm --needed - < $HOME/ArchTitus/pkg-files/virtualization.txt
 fi
 
-if [[ ${AUR_HELPER} == "pamac" ]]; then
-  sudo pacman -Rs --noconfirm yay
-fi
-
 # Theming DE
 export PATH=$PATH:~/.local/bin
 if [[ ${DESKTOP_ENV} == "kde" ]]; then
